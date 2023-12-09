@@ -1,4 +1,4 @@
-unit jjConsts;
+﻿unit jjConsts;
 
 interface
 
@@ -10,6 +10,8 @@ const
   C_ColorInverts: array[TjjColor] of TjjColor = (clBlack, clWhite);
   // White moves forward on the board; black moves backward.
   C_ColorOffsets: array[TjjColor] of Integer = (1, -1);
+  C_ColorNames: array[TjjColor] of String = ('White', 'Black');
+  C_ColorNamesLowerCase: array[TjjColor] of String = ('white', 'black');
 
   C_PieceValues: array[TjjPieceType] of Integer = (3, 100, 3, 1, 9, 5);
 

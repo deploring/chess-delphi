@@ -1,17 +1,16 @@
-unit jjComputerPlayers;
+unit jjNegamaxs;
 
 interface
 
 uses
-    jjPlayers
+    jjBoards
   , jjMoves
-  , jjBoards
   , jjConsts
   , System.Generics.Collections
   ;
 
 type
-  TjjComputerPlayer = class(TjjPlayer)
+  TjjNegamax = class(TObject)
   private const
     // The following comments are from stratzilla.
 
@@ -40,17 +39,17 @@ type
     // double any given board evaluation.
     C_Checkmate = (C_Check * ((C_C1 * 103) + (C_C2 * 215) + (C_C3 * 48))) + 1;
 
+    // Initial values for alpha and beta.
+    C_UpperBound = 99999;
+    C_LowerBound = -99999;
+
   private
-    FDepth: Integer;
+    FColor: TjjColor;
+    FBuffer: TList<String>;
     FEvaluationCount: Integer;
     FPruneCount: Integer;
-    FBuffer: TList<String>;
+    FBestMoveValue: Integer;
 
-    function NegamaxHandler(
-      Board: TjjBoard;
-      Alpha: Integer;
-      Beta: Integer
-    ): TjjMove;
     function Negamax(
       Board: TjjBoard;
       Depth: Integer;
@@ -61,57 +60,68 @@ type
     function EvaluateBoard(Board: TjjBoard): Integer;
 
   public
-    constructor Create(Color: TjjColor; Depth: Integer);
+    constructor Create(Color: TjjColor);
+    destructor Destroy; override;
 
-    function PromptMove(Board: TjjBoard): TjjMove; override;
+    function NegamaxHandler(Board: TjjBoard; Depth: Integer): TjjMove;
+
+    property EvaluationCount: Integer read FEvaluationCount;
+    property PruneCount: Integer read FPruneCount;
+    property BestMoveValue: Integer read FBestMoveValue;
   end;
 
 implementation
 
 uses
-    System.SysUtils
-  , System.Math
+    System.Math
+  , System.SysUtils
   ;
 
 //______________________________________________________________________________
 //
-// TjjComputerPlayer
+// TjjNegamax
 //______________________________________________________________________________
 
-constructor TjjComputerPlayer.Create(Color: TjjColor; Depth: Integer);
+constructor TjjNegamax.Create(Color: TjjColor);
 begin
-  inherited Create(Color);
-
-  FDepth := Depth;
+  FColor := Color;
   FBuffer := TList<String>.Create;
 end;
 
 //______________________________________________________________________________
 
-function TjjComputerPlayer.PromptMove(Board: TjjBoard): TjjMove;
+destructor TjjNegamax.Destroy;
 begin
-  Result := NegamaxHandler(Board, -9999, 9999);
+  FreeAndNil(FBuffer);
+
+  inherited;
 end;
 
 //______________________________________________________________________________
 
-function TjjComputerPlayer.NegamaxHandler(
+function TjjNegamax.NegamaxHandler(
   Board: TjjBoard;
-  Alpha: Integer;
-  Beta: Integer
+  Depth: Integer
 ): TjjMove;
 var
+  Alpha: Integer;
+  Beta: Integer;
   EligibleMoves: TObjectList<TjjMove>;
   BestMoves: TObjectList<TjjMove>;
-  BestMoveValue: Integer;
   EligibleMove: TjjMove;
   BoardClone: TjjBoard;
   MoveValue: Integer;
   MoveToMake: TjjMove;
 begin
-  EligibleMoves := Board.GetAllMoves(Color, False, True);
+  FEvaluationCount := 0;
+  FPruneCount := 0;
+  FBestMoveValue := C_LowerBound;
+
+  Alpha := C_LowerBound;
+  Beta := C_UpperBound;
+  
+  EligibleMoves := Board.GetAllMoves(FColor, False, True);
   BestMoves := TObjectList<TjjMove>.Create(False);
-  BestMoveValue := -9999;
 
   for EligibleMove in EligibleMoves do begin
     // From stratzilla:
@@ -128,15 +138,15 @@ begin
     BoardClone.MovePiece(EligibleMove);
 
     MoveValue :=
-      -Negamax(BoardClone, FDepth - 1, -Beta, -Alpha, C_ColorInverts[Color]);
+      -Negamax(BoardClone, Depth - 1, -Beta, -Alpha, C_ColorInverts[FColor]);
     FreeAndNil(BoardClone);
 
-    if (MoveValue = BestMoveValue) or (EligibleMoves.Count < C_BufferSize) then
+    if (MoveValue = FBestMoveValue) or (EligibleMoves.Count < C_BufferSize) then
     begin
       BestMoves.Add(EligibleMove);
     end
-    else if MoveValue > BestMoveValue then begin
-      BestMoveValue := MoveValue;
+    else if MoveValue > FBestMoveValue then begin
+      FBestMoveValue := MoveValue;
       BestMoves.Clear;
       BestMoves.Add(EligibleMove);
     end;
@@ -166,37 +176,23 @@ begin
   BoardClone := TjjBoard.Create(Board);
   BoardClone.MovePiece(MoveToMake);
 
-  if BoardClone.IsCheckmate(C_ColorInverts[Color]) then begin
-    BestMoveValue := C_Checkmate;
+  if BoardClone.IsCheckmate(C_ColorInverts[FColor]) then begin
+    FBestMoveValue := C_Checkmate;
   end
-  else if BoardClone.IsStalemate(C_ColorInverts[Color]) then begin
-    BestMoveValue := C_Stalemate;
+  else if BoardClone.IsStalemate(C_ColorInverts[FColor]) then begin
+    FBestMoveValue := C_Stalemate;
   end
   else if BoardClone.IsDraw then begin
-    BestMoveValue := C_Draw;
+    FBestMoveValue := C_Draw;
   end
-  else if BoardClone.IsCheck(C_ColorInverts[Color]) then begin
-    BestMoveValue := C_Check * EvaluateBoard(BoardClone);
+  else if BoardClone.IsCheck(C_ColorInverts[FColor]) then begin
+    FBestMoveValue := C_Check * EvaluateBoard(BoardClone);
   end
   else begin
-    BestMoveValue := EvaluateBoard(BoardClone);
+    FBestMoveValue := EvaluateBoard(BoardClone);
   end;
 
   FreeAndNil(BoardClone);
-
-  Writeln(Format(
-    '%d game state(s) evaluated; %d pruned.',
-    [FEvaluationCount, FPruneCount]
-  ));
-
-  if BestMoves.Count > 1 then begin
-    Writeln(Format(
-      'Found %d equivalent moves; chose one randomly.',
-      [BestMoves.Count]
-    ));
-  end;
-
-  Writeln(Format('Chose move with a score of %d.' + NL, [BestMoveValue]));
 
   Result := TjjMove.Create(
     MoveToMake.OriginRow,
@@ -207,14 +203,11 @@ begin
 
   FreeAndNil(EligibleMoves);
   FreeAndNil(BestMoves);
-
-  FEvaluationCount := 0;
-  FPruneCount := 0;
 end;
 
 //______________________________________________________________________________
 
-function TjjComputerPlayer.Negamax(
+function TjjNegamax.Negamax(
   Board: TjjBoard;
   Depth: Integer;
   Alpha: Integer;
@@ -223,7 +216,6 @@ function TjjComputerPlayer.Negamax(
 ): Integer;
 var
   Offset: Integer;
-  MoveValue: Integer;
   EligibleMoves: TObjectList<TjjMove>;
   EligibleMove: TjjMove;
   BoardClone: TjjBoard;
@@ -231,16 +223,11 @@ var
 begin
   FEvaluationCount := FEvaluationCount + 1;
 
-  if Self.Color = CurrentColor then begin
+  if FColor = CurrentColor then begin
     Offset := 1;
   end
   else begin
     Offset := -1;
-  end;
-
-  if Depth = 0 then begin
-    Result := Offset * EvaluateBoard(Board);
-    Exit;
   end;
 
   if Board.IsCheckmate(CurrentColor) then begin
@@ -258,7 +245,12 @@ begin
     Exit;
   end;
 
-  MoveValue := -9999;
+  if Depth = 0 then begin
+    Result := Offset * EvaluateBoard(Board);
+    Exit;
+  end;
+
+  Result := C_LowerBound;
   EligibleMoves := Board.GetAllMoves(CurrentColor, False, True);
 
   for EligibleMove in EligibleMoves do begin
@@ -279,8 +271,8 @@ begin
 
     FreeAndNil(BoardClone);
 
-    MoveValue := Max(MoveValue, NegamaxValue);
-    Alpha := Max(Alpha, MoveValue);
+    Result := Max(Result, NegamaxValue);
+    Alpha := Max(Alpha, Result);
 
     if Alpha > Beta then begin
       FPruneCount := FPruneCount + 1;
@@ -288,21 +280,19 @@ begin
     end;
   end;
 
-  Result := MoveValue;
-
   FreeAndNil(EligibleMoves);
 end;
 
 //______________________________________________________________________________
 
-function TjjComputerPlayer.EvaluateBoard(Board: TjjBoard): Integer;
+function TjjNegamax.EvaluateBoard(Board: TjjBoard): Integer;
 begin
   // See stratzilla's GitHub README for more information about these
   // coefficients.
   Result :=
-    (C_C1 * Board.GetAllPieceValues(Self.Color)) +
-    (C_C2 * Board.GetAllMobilityValues(Self.Color)) +
-    (C_C3 * Board.GetAllPawnValues(Self.Color));
+    (C_C1 * Board.GetAllPieceValues(FColor)) +
+    (C_C2 * Board.GetAllMobilityValues(FColor)) +
+    (C_C3 * Board.GetAllPawnValues(FColor));
 end;
 
 end.

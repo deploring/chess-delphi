@@ -18,6 +18,7 @@ type
       DestinationColumn: Integer
     );
 
+    function Clone: TjjMove;
     function StateMove: String;
 
     function IsOriginSameAs(Move: TjjMove): Boolean;
@@ -52,6 +53,18 @@ begin
   FOriginColumn := OriginColumn;
   FDestinationRow := DestinationRow;
   FDestinationColumn := DestinationColumn;
+end;
+
+//______________________________________________________________________________
+
+function TjjMove.Clone: TjjMove;
+begin
+  Result := TjjMove.Create(
+    FOriginRow,
+    FOriginColumn,
+    FDestinationRow,
+    FDestinationColumn
+  );
 end;
 
 //______________________________________________________________________________

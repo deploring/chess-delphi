@@ -73,6 +73,7 @@ type
     destructor Destroy; override;
 
     function StateBoard(
+      PreviousMove: TjjMove = nil;
       Moves: TObjectList<TjjMove> = nil;
       OriginRow: Integer = -1;
       OriginColumn: Integer = -1
@@ -431,9 +432,10 @@ end;
 
 //______________________________________________________________________________
 
-// Supplying moves is optional and will indicate where a piece can move on the
-// board. The origin of the piece to move must be supplied for this.
 function TjjBoard.StateBoard(
+  // Supplying the previous move will show the previous position of the piece.
+  PreviousMove: TjjMove = nil;
+  // Supplying the below 3 parameters will show where a selected piece can move.
   Moves: TObjectList<TjjMove> = nil;
   OriginRow: Integer = -1;
   OriginColumn: Integer = -1
@@ -466,6 +468,14 @@ begin
           Assert(Piece.Color = clBlack, 'Expected black color.');
           PieceDisplayValue := C_BlackPieceDisplayValues[Piece.PieceType];
         end;
+      end;
+
+      if Assigned(PreviousMove) and
+        (PreviousMove.OriginRow = Row) and
+        (PreviousMove.OriginColumn = Column) then
+      begin
+        Assert(not Assigned(Piece), 'Piece should not exist!');
+        PieceDisplayValue := '~';
       end;
 
       MoveDisplayValue := ' ';

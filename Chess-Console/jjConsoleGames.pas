@@ -1,4 +1,4 @@
-unit jjGames;
+unit jjConsoleGames;
 
 interface
 
@@ -10,7 +10,7 @@ uses
   ;
 
 type
-  TjjGame = class(TObject)
+  TjjConsoleGame = class(TObject)
   private
     FBoard: TjjBoard;
     FPlayerWhite: TjjPlayer;
@@ -35,7 +35,7 @@ uses
 // TjjGame
 //______________________________________________________________________________
 
-constructor TjjGame.Create(PlayerWhite: TjjPlayer; PlayerBlack: TjjPlayer);
+constructor TjjConsoleGame.Create(PlayerWhite: TjjPlayer; PlayerBlack: TjjPlayer);
 begin
   FBoard := TjjBoard.Create;
   FPlayerWhite := PlayerWhite;
@@ -45,7 +45,7 @@ end;
 
 //______________________________________________________________________________
 
-destructor TjjGame.Destroy;
+destructor TjjConsoleGame.Destroy;
 begin
   FreeAndNil(FBoard);
 
@@ -54,13 +54,12 @@ end;
 
 //______________________________________________________________________________
 
-procedure TjjGame.Play;
+procedure TjjConsoleGame.Play;
 var
   Move: TjjMove;
 begin
+  Writeln(FBoard.StateBoard);
   while True do begin
-    Writeln(FBoard.StateBoard);
-
     if FBoard.IsCheckmate(clWhite) then begin
       Writeln('Black checkmates white!' + NL);
       Break;
@@ -85,17 +84,18 @@ begin
     Move := FPlayerWhite.PromptMove(FBoard);
 
     if not Assigned(Move) then begin
-      Writeln('White forfeits.');
+      Writeln('White forfeits.' + NL);
       Break;
     end;
 
     Writeln(Format('White has moved %s.' + NL, [Move.StateMove]));
     FBoard.MovePiece(Move);
-    FreeAndNil(Move);
 
     FMoveCount := FMoveCount + 1;
 
-    Writeln(FBoard.StateBoard);
+    Writeln(FBoard.StateBoard(Move));
+
+    FreeAndNil(Move);
 
     if FBoard.IsCheckmate(clBlack) then begin
       Writeln('White checkmates black!' + NL);
@@ -121,15 +121,18 @@ begin
     Move := FPlayerBlack.PromptMove(FBoard);
 
     if not Assigned(Move) then begin
-      Writeln('Black forfeits.');
+      Writeln('Black forfeits.' + NL);
       Break;
     end;
 
     Writeln(Format('Black has moved %s.' + NL, [Move.StateMove]));
     FBoard.MovePiece(Move);
-    FreeAndNil(Move);
 
     FMoveCount := FMoveCount + 1;
+
+    Writeln(FBoard.StateBoard(Move));
+
+    FreeAndNil(Move);
   end;
 end;
 

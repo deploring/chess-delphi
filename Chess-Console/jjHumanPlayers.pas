@@ -143,7 +143,7 @@ begin
     end;
 
     if Length(Input) = 2 then begin
-      Writeln(Board.StateBoard(EligibleMoves, OriginRow, OriginColumn));
+      Writeln(Board.StateBoard(nil, EligibleMoves, OriginRow, OriginColumn));
       Continue;
     end;
 
