@@ -16,6 +16,7 @@
 *.a
 *.o
 *.ocx
+*.res
 
 # Delphi compiler-generated folders
 Win32/
