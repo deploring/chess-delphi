@@ -12,13 +12,11 @@ object jjFramePlayerSelection: TjjFramePlayerSelection
     Height = 205
     Align = alClient
     TabOrder = 0
-    ExplicitWidth = 400
-    ExplicitHeight = 312
     object LabelColor: TLabel
       AlignWithMargins = True
       Left = 4
       Top = 4
-      Width = 37
+      Width = 204
       Height = 19
       Align = alTop
       Alignment = taCenter
@@ -31,6 +29,7 @@ object jjFramePlayerSelection: TjjFramePlayerSelection
       ParentFont = False
       Transparent = True
       Layout = tlBottom
+      ExplicitWidth = 37
     end
     object LabelDepth: TLabel
       Left = 16

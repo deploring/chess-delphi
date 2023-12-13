@@ -2,18 +2,18 @@ program ChessGui;
 
 uses
   Vcl.Forms,
-  FChessGui in 'FChessGui.pas' {jjFormChessGui},
-  jjFormControllers in 'jjFormControllers.pas',
-  FrPlayerSelection in 'FrPlayerSelection.pas' {jjFramePlayerSelection: TFrame},
-  jjConsts in '..\Common\jjConsts.pas',
-  FrGameParamss in 'FrGameParamss.pas' {jjFrameGameParams: TFrame},
-  jjMoves in '..\Common\jjMoves.pas',
-  jjBoards in '..\Common\jjBoards.pas',
-  jjPlayers in '..\Common\jjPlayers.pas',
-  jjNegamaxs in '..\Common\jjNegamaxs.pas',
-  jjGuiComputerPlayers in 'jjGuiComputerPlayers.pas',
-  jjGuiHumanPlayers in 'jjGuiHumanPlayers.pas',
-  FrGames in 'FrGames.pas' {jjFrameGame: TFrame};
+  FChessGui in 'Source\FChessGui.pas' {jjFormChessGui},
+  jjFormControllers in 'Source\jjFormControllers.pas',
+  FrPlayerSelections in 'Source\FrPlayerSelections.pas' {jjFramePlayerSelection: TFrame},
+  jjConsts in '..\Common\Source\jjConsts.pas',
+  FrGameParamss in 'Source\FrGameParamss.pas' {jjFrameGameParams: TFrame},
+  jjMoves in '..\Common\Source\jjMoves.pas',
+  jjBoards in '..\Common\Source\jjBoards.pas',
+  jjPlayers in '..\Common\Source\jjPlayers.pas',
+  jjNegamaxs in '..\Common\Source\jjNegamaxs.pas',
+  jjGuiComputerPlayers in 'Source\jjGuiComputerPlayers.pas',
+  jjGuiHumanPlayers in 'Source\jjGuiHumanPlayers.pas',
+  FrGames in 'Source\FrGames.pas' {jjFrameGame: TFrame};
 
 {$R *.res}
 

@@ -24,8 +24,8 @@ object jjFrameGameParams: TjjFrameGameParams
       AlignWithMargins = True
       Left = 4
       Top = 4
-      Width = 626
-      Height = 38
+      Width = 578
+      Height = 15
       Align = alClient
       Alignment = taCenter
       Caption = 
@@ -38,8 +38,6 @@ object jjFrameGameParams: TjjFrameGameParams
       Font.Style = []
       ParentFont = False
       WordWrap = True
-      ExplicitWidth = 578
-      ExplicitHeight = 15
     end
   end
   object PanelPlayerSelection: TPanel

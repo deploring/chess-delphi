@@ -89,14 +89,14 @@
         <DelphiCompile Include="$(MainSource)">
             <MainSource>MainSource</MainSource>
         </DelphiCompile>
-        <DCCReference Include="..\Common\jjBoards.pas"/>
-        <DCCReference Include="..\Common\jjConsts.pas"/>
-        <DCCReference Include="..\Common\jjMoves.pas"/>
-        <DCCReference Include="..\Common\jjPlayers.pas"/>
-        <DCCReference Include="..\Common\jjNegamaxs.pas"/>
-        <DCCReference Include="jjComputerPlayers.pas"/>
-        <DCCReference Include="jjConsoleGames.pas"/>
-        <DCCReference Include="jjHumanPlayers.pas"/>
+        <DCCReference Include="..\Common\Source\jjBoards.pas"/>
+        <DCCReference Include="..\Common\Source\jjConsts.pas"/>
+        <DCCReference Include="..\Common\Source\jjMoves.pas"/>
+        <DCCReference Include="..\Common\Source\jjPlayers.pas"/>
+        <DCCReference Include="..\Common\Source\jjNegamaxs.pas"/>
+        <DCCReference Include="Source\jjComputerPlayers.pas"/>
+        <DCCReference Include="Source\jjConsoleGames.pas"/>
+        <DCCReference Include="Source\jjHumanPlayers.pas"/>
         <BuildConfiguration Include="Base">
             <Key>Base</Key>
         </BuildConfiguration>

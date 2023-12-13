@@ -1,4 +1,4 @@
-unit FrPlayerSelection;
+unit FrPlayerSelections;
 
 interface
 

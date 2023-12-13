@@ -77,6 +77,7 @@ uses
   , jjGuiComputerPlayers
   , System.Threading
   , System.Classes
+  , jjNegamaxs
   ;
 
 //______________________________________________________________________________
@@ -196,6 +197,7 @@ begin
       procedure
       var
         Move: TjjMove;
+        Negamax: TjjNegamax;
       begin
         Move := CurrentPlayerObject.PromptMove(FBoard);
 
@@ -204,6 +206,20 @@ begin
           nil,
           procedure
           begin
+            Negamax := (CurrentPlayerObject as TjjGuiComputerPlayer).Negamax;
+            WriteMessageToLog([TjjLogMessage.Create(
+              Format(
+                '%d game state(s) evaluated; %d pruned. Chose move with a ' +
+                  'score of %d.',
+                [
+                  Negamax.EvaluationCount,
+                  Negamax.PruneCount,
+                  Negamax.BestMoveValue
+                ]
+              ),
+              [fsItalic]
+            )]);
+
             MakeMove(Move);
             FreeAndNil(Move);
           end

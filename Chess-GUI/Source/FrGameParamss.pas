@@ -8,7 +8,7 @@ uses
   , Vcl.StdCtrls
   , System.Classes
   , Vcl.ExtCtrls
-  , FrPlayerSelection
+  , FrPlayerSelections
   , jjFormControllers
   ;
 

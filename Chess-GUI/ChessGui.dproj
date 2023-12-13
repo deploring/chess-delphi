@@ -125,26 +125,26 @@
         <DelphiCompile Include="$(MainSource)">
             <MainSource>MainSource</MainSource>
         </DelphiCompile>
-        <DCCReference Include="FChessGui.pas">
+        <DCCReference Include="Source\FChessGui.pas">
             <Form>jjFormChessGui</Form>
         </DCCReference>
-        <DCCReference Include="jjFormControllers.pas"/>
-        <DCCReference Include="FrPlayerSelection.pas">
+        <DCCReference Include="Source\jjFormControllers.pas"/>
+        <DCCReference Include="Source\FrPlayerSelections.pas">
             <Form>jjFramePlayerSelection</Form>
             <DesignClass>TFrame</DesignClass>
         </DCCReference>
-        <DCCReference Include="..\Common\jjConsts.pas"/>
-        <DCCReference Include="FrGameParamss.pas">
+        <DCCReference Include="..\Common\Source\jjConsts.pas"/>
+        <DCCReference Include="Source\FrGameParamss.pas">
             <Form>jjFrameGameParams</Form>
             <DesignClass>TFrame</DesignClass>
         </DCCReference>
-        <DCCReference Include="..\Common\jjMoves.pas"/>
-        <DCCReference Include="..\Common\jjBoards.pas"/>
-        <DCCReference Include="..\Common\jjPlayers.pas"/>
-        <DCCReference Include="..\Common\jjNegamaxs.pas"/>
-        <DCCReference Include="jjGuiComputerPlayers.pas"/>
-        <DCCReference Include="jjGuiHumanPlayers.pas"/>
-        <DCCReference Include="FrGames.pas">
+        <DCCReference Include="..\Common\Source\jjMoves.pas"/>
+        <DCCReference Include="..\Common\Source\jjBoards.pas"/>
+        <DCCReference Include="..\Common\Source\jjPlayers.pas"/>
+        <DCCReference Include="..\Common\Source\jjNegamaxs.pas"/>
+        <DCCReference Include="Source\jjGuiComputerPlayers.pas"/>
+        <DCCReference Include="Source\jjGuiHumanPlayers.pas"/>
+        <DCCReference Include="Source\FrGames.pas">
             <Form>jjFrameGame</Form>
             <DesignClass>TFrame</DesignClass>
         </DCCReference>

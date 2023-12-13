@@ -21,6 +21,8 @@ type
     destructor Destroy; override;
 
     function PromptMove(Board: TjjBoard): TjjMove; override;
+
+    property Negamax: TjjNegamax read FNegamax;
   end;
 
 implementation

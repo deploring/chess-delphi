@@ -6,14 +6,14 @@ program ChessConsole;
 
 uses
   System.SysUtils,
-  jjBoards in '..\Common\jjBoards.pas',
-  jjConsts in '..\Common\jjConsts.pas',
-  jjMoves in '..\Common\jjMoves.pas',
-  jjPlayers in '..\Common\jjPlayers.pas',
-  jjNegamaxs in '..\Common\jjNegamaxs.pas',
-  jjComputerPlayers in 'jjComputerPlayers.pas',
-  jjConsoleGames in 'jjConsoleGames.pas',
-  jjHumanPlayers in 'jjHumanPlayers.pas';
+  jjBoards in '..\Common\Source\jjBoards.pas',
+  jjConsts in '..\Common\Source\jjConsts.pas',
+  jjMoves in '..\Common\Source\jjMoves.pas',
+  jjPlayers in '..\Common\Source\jjPlayers.pas',
+  jjNegamaxs in '..\Common\Source\jjNegamaxs.pas',
+  jjComputerPlayers in 'Source\jjComputerPlayers.pas',
+  jjConsoleGames in 'Source\jjConsoleGames.pas',
+  jjHumanPlayers in 'Source\jjHumanPlayers.pas';
 
 function AddComputerPlayer(Color: TjjColor): TjjComputerPlayer;
 var
